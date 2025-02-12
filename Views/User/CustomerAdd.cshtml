@@ -1,0 +1,349 @@
+﻿@model QShop.Models.ViewModel.CustomerViewModel
+
+<div class="main-container">
+    <div class="left-panel">
+        <div class="brand-content">
+            <h1>Welcome to Qshop</h1>
+            <p>Join thousands of happy customers today!</p>
+            <div class="features">
+                <div class="feature-item">
+                    <span class="checkmark">✓</span>
+                    <span>Exclusive Deals</span>
+                </div>
+                <div class="feature-item">
+                    <span class="checkmark">✓</span>
+                    <span>Fast Delivery</span>
+                </div>
+                <div class="feature-item">
+                    <span class="checkmark">✓</span>
+                    <span>24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <form class="registration-form" asp-action="CustomerAdd" method="post">
+            <h2>Create Account</h2>
+
+            <div class="form-fields">
+                <div class="form-group">
+                    <input type="text" asp-for="Name" required />
+                    <label>Full Name</label>
+                    <span asp-validation-for="Name" class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" asp-for="Email" required />
+                    <label>Email Address</label>
+                    <span asp-validation-for="Email" class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" asp-for="Phone" required />
+                    <label>Phone Number</label>
+                    <span asp-validation-for="Phone" class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" asp-for="Address" required />
+                    <label>Address</label>
+                    <span asp-validation-for="Address" class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <select name="AreaId" required>
+                        <option value="">Select Your Area</option>
+                        @foreach (var area in ViewBag.Areas)
+                        {
+                            <option value="@area.AreaId">@area.AreaName</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" asp-for="Password" required />
+                    <label>Password</label>
+                    <span asp-validation-for="Password" class="error"></span>
+                </div>
+            </div>
+
+            <button type="submit">Get Started</button>
+            <div class="registration-options">
+                <p class="options-divider">or</p>
+                <p class="supplier-prompt">Are you a business owner?</p>
+                <a asp-action="Add" asp-controller="User" class="supplier-link">
+                    Register as Supplier
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: #f5f5f5;
+        height: 100vh;
+        margin: 0;
+        color: #333;
+    }
+
+    .main-container {
+        display: flex;
+        min-height: 100vh;
+        background: white;
+    }
+
+    .left-panel {
+        flex: 1;
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,0.1)' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+    .brand-content {
+        position: relative;
+        z-index: 1;
+        max-width: 400px;
+    }
+
+        .brand-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .brand-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+    .features {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .checkmark {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .right-panel {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .registration-form {
+        width: 100%;
+        max-width: 400px;
+    }
+
+        .registration-form h2 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
+        }
+
+    .form-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 4px;
+            color: #666;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4ECDC4;
+            outline: none;
+        }
+
+            .form-group input:focus + label,
+            .form-group input:not(:placeholder-shown) + label {
+                top: 0;
+                font-size: 0.85rem;
+                color: #4ECDC4;
+            }
+
+    .error {
+        color: #FF6B6B;
+        font-size: 0.85rem;
+        margin-top: 4px;
+        display: block;
+    }
+
+    button {
+        width: 100%;
+        padding: 16px;
+        margin-top: 2rem;
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+        }
+
+    @@media (max-width: 768px) {
+        .main-container
+
+    {
+        flex-direction: column;
+    }
+
+    .left-panel {
+        padding: 40px 20px;
+    }
+
+    .right-panel {
+        padding: 40px 20px;
+    }
+
+    .brand-content h1 {
+        font-size: 2rem;
+    }
+
+    }
+
+    .registration-options {
+        margin-top: 24px;
+        text-align: center;
+        position: relative;
+        padding-top: 20px;
+    }
+
+    .options-divider {
+        background-color: #fff;
+        padding: 0 10px;
+        color: #6B7280;
+        font-size: 14px;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+        .options-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -50px;
+            right: -50px;
+            height: 1px;
+            background-color: #e5e7eb;
+            z-index: -1;
+        }
+
+    .supplier-prompt {
+        color: #4B5563;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .supplier-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background-color: #f3f4f6;
+        color: #4F46E5;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+        .supplier-link:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+    .arrow-icon {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s ease;
+    }
+
+    .supplier-link:hover .arrow-icon {
+        transform: translateX(4px);
+    }
+</style>

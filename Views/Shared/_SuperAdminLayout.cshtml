@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Admin Panel</title>
+</head>
+<body>
+    <header>
+        <h1>Super Admin Panel</h1>
+        <nav>
+            <a href="@Url.Action("Dashboard", "SuperAdmin")">Dashboard</a>
+            <a href="@Url.Action("ManageAdmins", "SuperAdmin")">Admins</a>
+            <a href="@Url.Action("ManageStores", "SuperAdmin")">Stores</a>
+            <a href="@Url.Action("ViewReports", "SuperAdmin")">Reports</a>
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+</body>
+</html>
