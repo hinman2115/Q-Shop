@@ -36,15 +36,13 @@ public partial class QshopContext : DbContext
     {
         modelBuilder.Entity<Area>(entity =>
         {
-            entity.HasKey(e => e.AreaId).HasName("PK__Area__425676CE4743296D");
+            entity.HasKey(e => e.AreaId).HasName("PK__tmp_ms_x__425676CE8BCF4BB2");
 
             entity.ToTable("Area");
 
-            entity.Property(e => e.AreaId)
-                .ValueGeneratedNever()
-                .HasColumnName("Area_Id");
+            entity.Property(e => e.AreaId).HasColumnName("Area_Id");
             entity.Property(e => e.AreaName)
-                .HasMaxLength(1)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("Area_Name");
         });
@@ -95,6 +93,9 @@ public partial class QshopContext : DbContext
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.AreaId).HasColumnName("area_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.PImage)
+                .HasMaxLength(1000)
+                .HasColumnName("P_Image");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("price");

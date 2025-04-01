@@ -17,6 +17,8 @@ public partial class Product
 
     public int StockQuantity { get; set; }
 
+    public string? PImage { get; set; }
+
     public virtual Area Area { get; set; } = null!;
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();

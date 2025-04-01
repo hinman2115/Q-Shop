@@ -1,38 +1,43 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QShop.Models.Data;
+using QShop.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Database connection
 builder.Services.AddDbContext<QshopContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache(); // Required for session storage
+builder.Services.AddHttpClient();  // ✅ Add this line to fix the error
 
 
+// Build application
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-//
-//
-app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
+app.UseRouting();
+app.UseSession(); // Moved here
+app.UseAuthentication(); // Ensure authentication works
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Login}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();

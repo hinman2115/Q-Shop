@@ -17,7 +17,8 @@ public partial class User
 
     public int? AreaId { get; set; }
 
-    public string Role { get; set; }  
+    public string? Role { get; set; }
+
     public string PasswordHash { get; set; } = null!;
 
     public virtual Area? Area { get; set; }

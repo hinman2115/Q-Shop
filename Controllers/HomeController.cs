@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using QShop.Models;
+using QShop.Models.Entitty;
 
 namespace QShop.Controllers
 {

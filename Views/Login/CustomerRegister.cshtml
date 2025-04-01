@@ -1,0 +1,47 @@
+﻿@using QShop.Models.ViewModel.Login
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RegisterViewModel
+
+<h2>Customer Registration</h2>
+<form asp-action="CustomerRegister" method="post">
+    <div>
+        <label>Full Name:</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>Phone:</label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone"></span>
+    </div>
+    <div class="form-group">
+        <label>Area</label>
+        <select asp-for="AreaId" asp-items="ViewBag.Areas" class="form-control">
+            <option value="">Select Area</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Password:</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <button type="submit">Register as Customer</button>
+</form>
+
+<!-- Button to Redirect to Admin Registration -->
+<a asp-controller="Login" asp-action="AdminRegister">
+    <button type="button">Register as Admin</button>
+</a>

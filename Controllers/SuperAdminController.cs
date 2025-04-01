@@ -12,11 +12,11 @@ namespace QShop.Controllers
         public SuperAdminController(QshopContext context)
         {
             _context = context;
-            
+
         }
         public IActionResult SuperAdd()
         {
-            ViewBag.names =  HttpContext.Session.GetString("Name");
+            ViewBag.names = HttpContext.Session.GetString("Name");
             return View();
         }
 

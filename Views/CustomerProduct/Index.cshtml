@@ -1,0 +1,257 @@
+﻿@using QShop.Models.ViewModel.NewFolder
+@model List<Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QShop - Quick Commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 10px 0;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .product-img {
+            padding: 10px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">QShop</a>
+            <button class="btn btn-outline-secondary btn-sm me-2">Select Location</button>
+            <div class="flex-grow-1 mx-3">
+                <input type="text" class="form-control" placeholder="Search products">
+            </div>
+            <a href="#" class="nav-link">Login</a>
+            <a href="@Url.Action("CartDetails", "CustomerProduct")" class="nav-link" id="cart-icon">Cart <span id="cart-count">0</span></a>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Banner -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2>Electronics Corner</h2>
+                                <p>Chargers, Cables & Electronic Accessories</p>
+                                <button class="btn btn-primary">Order Now</button>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <img src="/api/placeholder/300/200" alt="Electronics Products" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Our Products</h4>
+                    <a href="#" class="text-decoration-none">See All</a>
+                </div>
+            </div>
+
+            <!-- Product Cards -->
+
+            @* image is here *@
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var product in Model)
+                {
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="product-card">
+                            <img src="@product.PImage" alt="@product.ProductName" class="img-fluid product-img">
+                            <div class="product-info">
+                                <h5 class="h6">@product.ProductName</h5>
+                                <p class="small">In Stock: @product.StockQuantity</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        ₹@product.Price
+                                    </div>
+                                    <button class="btn btn-sm btn-primary add-to-cart-btn"
+                                            data-product-id="@product.ProductId"
+                                            data-product-name="@product.ProductName"
+                                            data-price="@product.Price">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <p>No products available at the moment.</p>
+                </div>
+            }
+        </div>
+
+        <!-- How It Works -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">How it Works</h3>
+                        <div class="row">
+                            <div class="col-md-4 mb-3 text-center">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cart mb-3" viewBox="0 0 16 16">
+                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                    </svg>
+                                    <h5>Open the app</h5>
+                                    <p>Choose from over 7000 products</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3 text-center">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bag mb-3" viewBox="0 0 16 16">
+                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                    </svg>
+                                    <h5>Place an order</h5>
+                                    <p>Add items to cart & avail offers</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3 text-center">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-truck mb-3" viewBox="0 0 16 16">
+                                        <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 1 1 1.732 1.732A2 2 0 0 1 12 10zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                    </svg>
+                                    <h5>Get free delivery</h5>
+                                    <p>Items delivered in 10 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h4>Categories</h4>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <a href="#" class="btn btn-outline-secondary w-100">Electronics</a>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <a href="#" class="btn btn-outline-secondary w-100">Mobile Accessories</a>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <a href="#" class="btn btn-outline-secondary w-100">Chargers</a>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <a href="#" class="btn btn-outline-secondary w-100">Cables</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>QShop</h5>
+                    <p>Quick commerce for your daily needs</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-decoration-none">Contact Us</a></li>
+                        <li><a href="#" class="text-decoration-none">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-decoration-none">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Contact</h5>
+                    <p>Email: support@qshop.com</p>
+                    <p>Phone: +91 1234567890</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="small">© 2025 QShop. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let cartCount = 0;
+
+            $('.add-to-cart-btn').click(function() {
+                var button = $(this);
+                var productId = button.data('product-id');
+                var productName = button.data('product-name');
+                var price = button.data('price');
+
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "CustomerProduct")',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        productName: productName,
+                        price: price
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            cartCount++;
+                            $('#cart-count').text(cartCount);
+                            alert('Product added to cart successfully!');
+                        } else {
+                            alert('Failed to add product to cart.');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while adding the product to cart.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

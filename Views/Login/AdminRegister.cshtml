@@ -1,0 +1,267 @@
+﻿@using QShop.Models.ViewModel.Login
+
+@model RegisterViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QShop Admin Registration</title>
+    <style>
+        :root {
+            --primary: #FF7F00;
+            --primary-dark: #E56717;
+            --primary-light: #FFAA33;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-dark: #5D5D5D;
+            --text-medium: #777777;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF7F00 0%, #FFAA33 100%);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-dark);
+        }
+
+        .container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(229, 103, 23, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 2.5rem;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+            h2:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary), var(--primary-light));
+                border-radius: 2px;
+            }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-align: left;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: var(--text-dark);
+                transition: all 0.3s ease;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: var(--white);
+            box-sizing: border-box;
+            color: var(--text-dark);
+        }
+
+            .form-control:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.25);
+                outline: none;
+            }
+
+            .form-control::placeholder {
+                color: #AAAAAA;
+            }
+
+        .field-validation-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 127, 0, 0.4);
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 127, 0, 0.6);
+            }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            margin-top: 1rem;
+        }
+
+            .btn-secondary:hover {
+                background: rgba(255, 127, 0, 0.05);
+                transform: translateY(-2px);
+            }
+
+        .glossy-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .glossy-effect::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient( to bottom right, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60% );
+                transform: rotate(30deg);
+                pointer-events: none;
+            }
+
+        .form-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+            .form-divider::before,
+            .form-divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: #eee;
+            }
+
+            .form-divider span {
+                padding: 0 1rem;
+                color: var(--text-medium);
+                font-size: 0.9rem;
+            }
+
+        /* Animation */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .container {
+            animation: fadeIn 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container glossy-effect">
+        <h2>Admin Registration</h2>
+
+        <form asp-action="AdminRegister" method="post">
+            <div class="form-group">
+                <label asp-for="Name">Full Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                <span asp-validation-for="Name" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email">Email Address</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone">Phone Number</label>
+                <input asp-for="Phone" class="form-control" placeholder="Enter your phone number" />
+                <span asp-validation-for="Phone" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AreaId">Area ID</label>
+                <input asp-for="AreaId" class="form-control" placeholder="Enter your area ID" />
+                <span asp-validation-for="AreaId" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Create a strong password" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary glossy-effect">Register as Admin</button>
+
+            <div class="form-divider">
+                <span>OR</span>
+            </div>
+
+            <a asp-controller="Login" asp-action="CustomerRegister" style="text-decoration: none; display: block;">
+                <button type="button" class="btn btn-secondary">Register as Customer</button>
+            </a>
+        </form>
+    </div>
+
+    <script>
+        // Add focus effects
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = '#FF7F00';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('label').style.color = '#5D5D5D';
+            });
+        });
+    </script>
+</body>
+</html>

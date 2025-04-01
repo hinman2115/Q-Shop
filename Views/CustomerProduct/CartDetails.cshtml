@@ -1,0 +1,383 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model QShop.Models.ViewModel.CartItemViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        /* Cart Header */
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+        }
+
+            .cart-header h2 {
+                color: #2c3e50;
+                font-size: 1.8rem;
+            }
+
+            .cart-header .text-muted {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+            }
+
+        /* Error Alert */
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Cart Table */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .cart-table th {
+                background-color: #f8f9fa;
+                color: #495057;
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .cart-table td {
+                padding: 15px;
+                vertical-align: middle;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+        .product-image {
+            max-width: 80px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* Buttons */
+        .remove-btn, .checkout-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+            .remove-btn:hover {
+                background-color: #c82333;
+            }
+
+        .checkout-btn {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+            .checkout-btn:hover {
+                background-color: #218838;
+            }
+
+        /* Total Price */
+        .total-price {
+            text-align: right;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Empty Cart */
+        .cart-empty {
+            text-align: center;
+            padding: 50px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            color: #6c757d;
+        }
+
+        /* Responsive Design */
+        @@media screen and (max-width: 768px) {
+            .cart-container {
+                padding: 15px;
+            }
+
+            .cart-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-table {
+                font-size: 0.9rem;
+            }
+
+                .cart-table th, .cart-table td {
+                    padding: 10px;
+                }
+
+            .product-image {
+                max-width: 50px;
+            }
+
+            .remove-btn, .checkout-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @@media screen and (max-width: 480px) {
+            .cart-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+                .cart-table thead {
+                    display: none;
+                }
+
+                .cart-table tr {
+                    display: block;
+                    margin-bottom: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+
+                .cart-table td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #eee;
+                    padding: 10px;
+                }
+
+                    .cart-table td::before {
+                        content: attr(data-label);
+                        font-weight: bold;
+                        margin-right: 10px;
+                    }
+
+            .product-image {
+                max-width: 60px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container cart-container">
+        <div class="cart-header">
+            <h2>Your Shopping Cart</h2>
+            <span class="text-muted">@Model.Items.Count Items</span>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (Model.Items != null && Model.Items.Count > 0)
+        {
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.PImage" alt="@item.ProductName" class="product-image" />
+                            </td>
+                            <td>@item.ProductName</td>
+                            <td>₹@item.Price</td>
+                            <td>@item.Quantity</td>
+                            <td>₹@Model.TotalPrice</td>
+                            <td>
+                                <button class="remove-btn" data-product-id="@item.ProductId">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="total-price">
+                Total: ₹@Model.TotalPrice
+            </div>
+
+            <div class="text-right">
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        }
+        else
+        {
+            <div class="cart-empty">
+                <p>Your cart is empty. Continue shopping to add items.</p>
+            </div>
+        }
+    </div>
+    <script>
+                document.addEventListener('DOMContentLoaded', function() {
+            // Select all remove buttons
+            const removeButtons = document.querySelectorAll('.remove-btn');
+
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get the product ID from a data attribute
+                    const productId = this.getAttribute('data-product-id');
+                    const row = this.closest('tr');
+
+                    // Send AJAX request to remove product
+                    fetch('/Cart/RemoveFromCart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ productId: parseInt(productId) })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Remove the row from the table
+                        row.remove();
+
+                        // Update cart count
+                        updateCartCount();
+
+                        // Update total price
+                        updateTotalPrice();
+
+                        // Show success message
+                        showNotification(data.message || 'Product removed successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Failed to remove product from cart.', 'error');
+                    });
+                });
+            });
+
+            // Function to update cart count
+            function updateCartCount() {
+                const cartItemCount = document.querySelector('.text-muted');
+                if (cartItemCount) {
+                    const currentCount = parseInt(cartItemCount.textContent.replace(/\D/g, ''));
+                    cartItemCount.textContent = `${currentCount - 1} Items`;
+                }
+
+                // If cart is now empty, show empty cart message
+                const tableBody = document.querySelector('.cart-table tbody');
+                if (tableBody && tableBody.children.length === 0) {
+                    const cartContainer = document.querySelector('.cart-container');
+                    if (cartContainer) {
+                        cartContainer.innerHTML = `
+                            <div class="cart-empty">
+                                <p>Your cart is empty. Continue shopping to add items.</p>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // Function to update total price
+            function updateTotalPrice() {
+                const totalPriceElement = document.querySelector('.total-price');
+                if (totalPriceElement) {
+                    const rows = document.querySelectorAll('.cart-table tbody tr');
+                    const newTotal = Array.from(rows).reduce((total, row) => {
+                        const priceCell = row.querySelector('td:nth-child(3)');
+                        const quantityCell = row.querySelector('td:nth-child(4)');
+
+                        if (priceCell && quantityCell) {
+                            const price = parseFloat(priceCell.textContent.replace('₹', ''));
+                            const quantity = parseInt(quantityCell.textContent);
+                            return total + (price * quantity);
+                        }
+                        return total;
+                    }, 0);
+
+                    totalPriceElement.textContent = `Total: ₹${newTotal.toFixed(2)}`;
+                }
+            }
+
+            // Function to show notifications
+            function showNotification(message, type = 'success') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `alert ${type === 'success' ? 'alert-success' : 'alert-danger'}`;
+                notification.textContent = message;
+
+                // Add to the cart container
+                const cartContainer = document.querySelector('.cart-container');
+                if (cartContainer) {
+                    cartContainer.insertBefore(notification, cartContainer.firstChild);
+
+                    // Remove notification after 3 seconds
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 3000);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
