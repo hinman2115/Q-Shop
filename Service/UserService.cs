@@ -2,18 +2,8 @@
 
 namespace QShop.Service
 {
-    public class UserService
+    public static class UserService
     {
-        private HttpClient _client;
-
-        public UserService(HttpClient httpClient)
-        {
-            _client = httpClient;
-        }
-        public async Task<bool> Register(AddUserViewModel model) { 
-         var responce = await _client.PostAsJsonAsync("api/User/register", model);
-            return responce.IsSuccessStatusCode;
-
-        }
+        public static string Apiurl = "https://localhost:5115/api/";
     }
 }

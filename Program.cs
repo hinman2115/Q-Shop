@@ -16,7 +16,12 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache(); // Required for session storage
 builder.Services.AddHttpClient();  // ✅ Add this line to fix the error
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(300); // Set session timeout
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // Build application
 var app = builder.Build();

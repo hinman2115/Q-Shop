@@ -17,7 +17,10 @@ namespace QShop.Models.ViewModel.NewFolder
         [Required(ErrorMessage = "Stock Quantity is required.")]
         public int StockQuantity { get; set; }
 
-        public string PImage { get; set; }
+        public string? PImage { get; set; } // To store the image path
+
+        [Display(Name = "Product Image")]
+        public IFormFile ImageFile { get; set; } // For file upload
 
         // Additional Properties
         public string AreaName { get; set; }

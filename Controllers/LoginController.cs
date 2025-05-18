@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using QShop.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QShop.Models.ViewModel.Login;
+using QShop.Service;
 
 namespace testapi.Controllers
 {
@@ -20,6 +21,7 @@ namespace testapi.Controllers
         private readonly HttpClient _httpClient;
         private readonly ILogger<LoginController> _logger;
         private readonly IMemoryCache _cache;
+        private string api;
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -29,9 +31,9 @@ namespace testapi.Controllers
         public LoginController(IHttpClientFactory httpClientFactory, ILogger<LoginController> logger, IMemoryCache cache)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:44381/api/");
+      
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            api = UserService.Apiurl;
             _logger = logger;
             _cache = cache;
         }
@@ -48,7 +50,7 @@ namespace testapi.Controllers
         {
             if (!_cache.TryGetValue("Areas", out List<AreaViewModel> areas))
             {
-                var response = await _httpClient.GetAsync("Areas/GetAreas");
+                var response = await _httpClient.GetAsync($"http://localhost:5115/api/Areas/GetAreas");
                 if (response.IsSuccessStatusCode)
                 {
                     areas = JsonSerializer.Deserialize<List<AreaViewModel>>(await response.Content.ReadAsStringAsync(), JsonOptions);
@@ -76,7 +78,7 @@ namespace testapi.Controllers
             {
                 model.Role = role;
                 var content = new StringContent(JsonSerializer.Serialize(model, JsonOptions), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("User/add", content);
+                var response = await _httpClient.PostAsync("http://localhost:5115/api/User/add", content);
 
                 if (response.IsSuccessStatusCode) return RedirectToAction(redirectAction);
 
@@ -103,7 +105,7 @@ namespace testapi.Controllers
             try
             {
                 var content = new StringContent(JsonSerializer.Serialize(loginViewModel, JsonOptions), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("User", content);
+                var response = await _httpClient.PostAsync($"http://localhost:5115/api/User", content);
 
                 if (response.IsSuccessStatusCode)
                 {

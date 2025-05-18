@@ -10,7 +10,7 @@ using QShop.Models.ViewModel.NewFolder;
 public class ManageProductController : Controller
 {
     private readonly HttpClient _httpClient;
-    private readonly string _baseUrl = "https://localhost:44371/"; // Change this to match your API
+    private readonly string _baseUrl = "http://localhost:5115/"; // Change this to match your API
 
     public ManageProductController(HttpClient httpClient)
     {

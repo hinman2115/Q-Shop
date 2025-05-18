@@ -1,10 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@model QShop.Models.ViewModel.CartItemViewModel
+﻿@model QShop.Models.ViewModel.Order.ShoppingCartViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,24 +14,24 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #f8fafc;
+            color: #2d3748;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
         }
 
         .cart-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
 
         /* Cart Header */
@@ -45,233 +39,399 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 15px;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #4a6cf7, #3b5de7);
+            color: white;
         }
 
             .cart-header h2 {
-                color: #2c3e50;
-                font-size: 1.8rem;
+                margin: 0;
+                font-weight: 600;
+                font-size: 1.5rem;
             }
 
-            .cart-header .text-muted {
-                color: #7f8c8d;
+            .cart-header .cart-count {
+                background-color: rgba(255, 255, 255, 0.2);
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
                 font-size: 0.9rem;
             }
 
-        /* Error Alert */
+        /* Notifications */
+        .alert {
+            padding: 1rem 1.5rem;
+            margin: 1rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
         .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background-color: #fed7d7;
+            color: #e53e3e;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .alert-success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-left: 4px solid #48bb78;
         }
 
         /* Cart Table */
+        .cart-body {
+            padding: 1.5rem;
+        }
+
         .cart-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
             .cart-table th {
-                background-color: #f8f9fa;
-                color: #495057;
-                padding: 12px;
+                background-color: #f8fafc;
+                color: #4a5568;
+                padding: 1rem;
                 text-align: left;
-                border-bottom: 1px solid #dee2e6;
+                font-weight: 600;
+                font-size: 0.875rem;
+                border-bottom: 1px solid #edf2f7;
             }
 
             .cart-table td {
-                padding: 15px;
+                padding: 1.25rem 1rem;
                 vertical-align: middle;
-                border-bottom: 1px solid #e9ecef;
+                border-bottom: 1px solid #edf2f7;
+                color: #2d3748;
             }
 
+        .product-cell {
+            display: flex;
+            align-items: center;
+        }
+
         .product-image {
-            max-width: 80px;
-            height: auto;
-            border-radius: 4px;
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .price-cell {
+            font-weight: 600;
+            color: #3b5de7;
         }
 
         /* Buttons */
-        .remove-btn, .checkout-btn {
-            padding: 8px 15px;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
 
-        .remove-btn {
-            background-color: #dc3545;
-            color: white;
+        .btn-danger {
+            background-color: #fff;
+            color: #e53e3e;
+            border: 1px solid #e53e3e;
         }
 
-            .remove-btn:hover {
-                background-color: #c82333;
+            .btn-danger:hover {
+                background-color: #e53e3e;
+                color: #fff;
             }
 
-        .checkout-btn {
-            background-color: #28a745;
+        .btn-primary {
+            background-color: #4a6cf7;
             color: white;
-            font-weight: bold;
+            padding: 0.75rem 1.5rem;
         }
 
-            .checkout-btn:hover {
-                background-color: #218838;
+            .btn-primary:hover {
+                background-color: #3b5de7;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(59, 93, 231, 0.2);
             }
 
-        /* Total Price */
-        .total-price {
-            text-align: right;
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
+        .btn-icon {
+            margin-right: 0.5rem;
+            display: inline-block;
+            vertical-align: middle;
         }
+
+        /* Summary Section */
+        .cart-summary {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            color: #4a5568;
+        }
+
+            .summary-row.total {
+                border-top: 1px solid #e2e8f0;
+                padding-top: 1rem;
+                margin-top: 0.5rem;
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #3b5de7;
+            }
+
+        .summary-label {
+            font-weight: 500;
+        }
+
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background-color: #f8fafc;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .continue-shopping {
+            color: #4a5568;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+            .continue-shopping svg {
+                margin-right: 0.5rem;
+            }
+
+            .continue-shopping:hover {
+                color: #3b5de7;
+            }
 
         /* Empty Cart */
         .cart-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
             text-align: center;
-            padding: 50px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            color: #6c757d;
+            color: #718096;
         }
+
+            .cart-empty svg {
+                width: 4rem;
+                height: 4rem;
+                color: #cbd5e0;
+                margin-bottom: 1rem;
+            }
+
+            .cart-empty p {
+                margin-bottom: 1.5rem;
+                font-size: 1.1rem;
+            }
 
         /* Responsive Design */
         @@media screen and (max-width: 768px) {
-            .cart-container {
-                padding: 15px;
-            }
+            .container
 
-            .cart-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .cart-table {
-                font-size: 0.9rem;
-            }
-
-                .cart-table th, .cart-table td {
-                    padding: 10px;
-                }
-
-            .product-image {
-                max-width: 50px;
-            }
-
-            .remove-btn, .checkout-btn {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
+        {
+            padding: 0.5rem;
         }
 
-        @@media screen and (max-width: 480px) {
-            .cart-table {
-                display: block;
-                overflow-x: auto;
+        .cart-header {
+            padding: 1rem 1.5rem;
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 0.75rem 0.5rem;
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+        }
+
+        }
+
+        @@media screen and (max-width: 640px) {
+            .cart-table thead
+
+        {
+            display: none;
+        }
+        }
+
+        .cart-table, .cart-table tbody, .cart-table tr {
+            display: block;
+            width: 100%;
+        }
+
+            .cart-table tr {
+                margin-bottom: 1.5rem;
+                border: 1px solid #edf2f7;
+                border-radius: 8px;
+                overflow: hidden;
+                background-color: #fff;
             }
 
-                .cart-table thead {
-                    display: none;
-                }
-
-                .cart-table tr {
-                    display: block;
-                    margin-bottom: 15px;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                }
-
-                .cart-table td {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    border-bottom: 1px solid #eee;
-                    padding: 10px;
-                }
-
-                    .cart-table td::before {
-                        content: attr(data-label);
-                        font-weight: bold;
-                        margin-right: 10px;
-                    }
-
-            .product-image {
-                max-width: 60px;
-                margin-bottom: 10px;
+            .cart-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                border-bottom: 1px solid #edf2f7;
             }
+
+                .cart-table td:last-child {
+                    border-bottom: none;
+                }
+
+                .cart-table td::before {
+                    content: attr(data-label);
+                    font-weight: 600;
+                    color: #4a5568;
+                    flex: 1;
+                }
+
+        .product-cell {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-image {
+            margin-bottom: 0.5rem;
+            margin-right: 0;
+        }
+
+        .cart-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+
         }
     </style>
 </head>
 <body>
-    <div class="container cart-container">
-        <div class="cart-header">
-            <h2>Your Shopping Cart</h2>
-            <span class="text-muted">@Model.Items.Count Items</span>
+    <div class="container">
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>Your Shopping Cart</h2>
+                <div class="cart-count">@Model.Items.Count Item@(Model.Items.Count != 1 ? "s" : "")</div>
+            </div>
+
+            <div class="cart-body">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                @if (Model.Items != null && Model.Items.Count > 0)
+                {
+                    <table class="cart-table">
+                        @* <thead> *@
+                        @*     <tr> *@
+                        @*         <th width="40%">Product</th> *@
+                        @*         <th>Price</th> *@
+                        @*         <th>Quantity</th> *@
+                        @*         <th>Total</th> *@
+                        @*         <th>Actions</th> *@
+                        @*     </tr> *@
+                        @* </thead> *@
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td data-label="Product">
+                                        <div class="product-cell">
+                                            <img src="@item.PImage" alt="@item.ProductName" class="product-image" />
+                                            <span class="product-name">@item.ProductName</span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Price" class="price-cell">₹@item.Price</td>
+                                    <td data-label="Quantity">@item.Quantity</td>
+                                    <td data-label="Total" class="price-cell">₹@(item.Price * item.Quantity)</td>
+                                    <td data-label="Actions">
+                                        <button class="btn btn-danger remove-btn" data-product-id="@item.ProductId">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span>₹@Model.TotalPrice.ToString("0.00")</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping</span>
+                            <span>₹0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total</span>
+                            <span>₹@Model.TotalPrice.ToString("0.00")</span>
+                        </div>
+                    </div>
+
+                    <button onclick="location.href='@Url.Action("Placeorder","CustomerProduct")'" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        Proceed to Checkout
+                    </button>
+                }
+                else
+                {
+                    <div class="cart-empty">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <p>Your cart is empty. Continue shopping to add items.</p>
+                        <a href="/Products" class="btn btn-primary">Browse Products</a>
+                    </div>
+                }
+            </div>
+
+            @if (Model.Items != null && Model.Items.Count > 0)
+            {
+                <div class="cart-actions">
+                    <a href="@Url.Action("Index","CustomerProduct")" class="continue-shopping">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Continue Shopping
+                    </a>
+                    <div class="secure-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem; color: #48bb78;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span style="color: #718096; font-size: 0.875rem;">Secure Checkout</span>
+                    </div>
+                </div>
+            }
         </div>
-
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["ErrorMessage"]
-            </div>
-        }
-
-        @if (Model.Items != null && Model.Items.Count > 0)
-        {
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Items)
-                    {
-                        <tr>
-                            <td>
-                                <img src="@item.PImage" alt="@item.ProductName" class="product-image" />
-                            </td>
-                            <td>@item.ProductName</td>
-                            <td>₹@item.Price</td>
-                            <td>@item.Quantity</td>
-                            <td>₹@Model.TotalPrice</td>
-                            <td>
-                                <button class="remove-btn" data-product-id="@item.ProductId">Remove</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <div class="total-price">
-                Total: ₹@Model.TotalPrice
-            </div>
-
-            <div class="text-right">
-                <button class="checkout-btn">Proceed to Checkout</button>
-            </div>
-        }
-        else
-        {
-            <div class="cart-empty">
-                <p>Your cart is empty. Continue shopping to add items.</p>
-            </div>
-        }
     </div>
+
     <script>
-                document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Select all remove buttons
             const removeButtons = document.querySelectorAll('.remove-btn');
 
@@ -282,7 +442,7 @@
                     const row = this.closest('tr');
 
                     // Send AJAX request to remove product
-                    fetch('/Cart/RemoveFromCart', {
+                    fetch('/CustomerProduct/RemoveFromCart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -306,21 +466,21 @@
                         updateTotalPrice();
 
                         // Show success message
-                        showNotification(data.message || 'Product removed successfully');
+                        showNotification(data.message || 'Product removed successfully', 'success');
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        showNotification('Failed to remove product from cart.', 'error');
+                        showNotification('Failed to remove product from cart.', 'danger');
                     });
                 });
             });
 
             // Function to update cart count
             function updateCartCount() {
-                const cartItemCount = document.querySelector('.text-muted');
+                const cartItemCount = document.querySelector('.cart-count');
                 if (cartItemCount) {
-                    const currentCount = parseInt(cartItemCount.textContent.replace(/\D/g, ''));
-                    cartItemCount.textContent = `${currentCount - 1} Items`;
+                    const currentCount = parseInt(cartItemCount.textContent.replace(/\D/g, '')) - 1;
+                    cartItemCount.textContent = `${currentCount} Item${currentCount !== 1 ? 's' : ''}`;
                 }
 
                 // If cart is now empty, show empty cart message
@@ -329,8 +489,16 @@
                     const cartContainer = document.querySelector('.cart-container');
                     if (cartContainer) {
                         cartContainer.innerHTML = `
-                            <div class="cart-empty">
-                                <p>Your cart is empty. Continue shopping to add items.</p>
+                            <div class="cart-header">
+                                <h2>Your Shopping Cart</h2>
+                                <div class="cart-count">0 Items</div>
+                            </div>
+                            <div class="cart-body">
+                                <div class="cart-empty">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                    <p>Your cart is empty. Continue shopping to add items.</p>
+                                    <a href="/Products" class="btn btn-primary">Browse Products</a>
+                                </div>
                             </div>
                         `;
                     }
@@ -339,12 +507,11 @@
 
             // Function to update total price
             function updateTotalPrice() {
-                const totalPriceElement = document.querySelector('.total-price');
-                if (totalPriceElement) {
-                    const rows = document.querySelectorAll('.cart-table tbody tr');
+                const rows = document.querySelectorAll('.cart-table tbody tr');
+                if (rows.length > 0) {
                     const newTotal = Array.from(rows).reduce((total, row) => {
-                        const priceCell = row.querySelector('td:nth-child(3)');
-                        const quantityCell = row.querySelector('td:nth-child(4)');
+                        const priceCell = row.querySelector('td[data-label="Price"]');
+                        const quantityCell = row.querySelector('td[data-label="Quantity"]');
 
                         if (priceCell && quantityCell) {
                             const price = parseFloat(priceCell.textContent.replace('₹', ''));
@@ -354,7 +521,11 @@
                         return total;
                     }, 0);
 
-                    totalPriceElement.textContent = `Total: ₹${newTotal.toFixed(2)}`;
+                    // Update all total price displays
+                    const totalValueElements = document.querySelectorAll('.summary-row.total span:last-child');
+                    totalValueElements.forEach(el => {
+                        el.textContent = `₹${newTotal.toFixed(2)}`;
+                    });
                 }
             }
 
@@ -362,13 +533,19 @@
             function showNotification(message, type = 'success') {
                 // Create notification element
                 const notification = document.createElement('div');
-                notification.className = `alert ${type === 'success' ? 'alert-success' : 'alert-danger'}`;
-                notification.textContent = message;
+                notification.className = `alert alert-${type}`;
+
+                // Add icon based on notification type
+                const iconSvg = type === 'success'
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+
+                notification.innerHTML = iconSvg + message;
 
                 // Add to the cart container
-                const cartContainer = document.querySelector('.cart-container');
-                if (cartContainer) {
-                    cartContainer.insertBefore(notification, cartContainer.firstChild);
+                const cartBody = document.querySelector('.cart-body');
+                if (cartBody) {
+                    cartBody.insertBefore(notification, cartBody.firstChild);
 
                     // Remove notification after 3 seconds
                     setTimeout(() => {
@@ -379,5 +556,4 @@
         });
     </script>
 </body>
-
 </html>

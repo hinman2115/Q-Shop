@@ -1,0 +1,553 @@
+﻿@{
+    ViewData["Title"] = "Create Product";
+}
+@model QShop.Models.ViewModel.NewFolder.Productadd
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
+            --secondary-color: #64748b;
+            --secondary-hover: #475569;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.125rem;
+            --radius: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+            .card-header::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background: linear-gradient(to bottom, rgba(0,0,0,0.05), transparent);
+            }
+
+            .card-header h2 {
+                margin: 0;
+                font-size: 1.5rem;
+                font-weight: 600;
+                text-align: center;
+            }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.75rem;
+        }
+
+        .form-col {
+            flex: 1 0 100%;
+            padding: 0.75rem;
+        }
+
+        @@media (min-width: 768px) {
+            .form-col-md-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--gray-800);
+            background-color: white;
+            background-clip: padding-box;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            transition: all 0.15s ease-in-out;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                outline: 0;
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+            }
+
+            .form-control::placeholder {
+                color: var(--gray-500);
+                opacity: 1;
+            }
+
+        .form-select {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--gray-800);
+            background-color: white;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            appearance: none;
+            transition: all 0.15s ease-in-out;
+        }
+
+            .form-select:focus {
+                border-color: var(--primary-color);
+                outline: 0;
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+            }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .input-group-text {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--gray-700);
+            text-align: center;
+            white-space: nowrap;
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius) 0 0 var(--radius);
+        }
+
+        .input-group > .form-control {
+            position: relative;
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group-file {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            width: 100%;
+        }
+
+            .input-group-file .form-control {
+                position: relative;
+                flex: 1 1 auto;
+                width: 1%;
+                min-width: 0;
+            }
+
+        .input-group-file-label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: white;
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+
+            .input-group-file-label:hover {
+                background-color: var(--primary-hover);
+                border-color: var(--primary-hover);
+            }
+
+        .text-danger {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--danger-color);
+        }
+
+        .text-muted {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .alert {
+            position: relative;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+        }
+
+        .alert-danger {
+            color: #842029;
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: var(--radius);
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            color: white;
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-hover);
+                border-color: var(--primary-hover);
+            }
+
+        .btn-outline {
+            color: var(--secondary-color);
+            background-color: transparent;
+            border: 1px solid var(--gray-300);
+        }
+
+            .btn-outline:hover {
+                color: var(--gray-800);
+                background-color: var(--gray-100);
+                border-color: var(--gray-400);
+            }
+
+        .btn-lg {
+            padding: 0.875rem 1.75rem;
+            font-size: 1.125rem;
+        }
+
+        .img-preview {
+            margin-top: 1rem;
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+            .img-preview.has-image {
+                border-color: var(--primary-color);
+                background-color: var(--primary-light);
+            }
+
+            .img-preview img {
+                max-width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+            }
+
+        .img-preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+
+        .img-preview-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .field-icon {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Form validation styles */
+        .was-validated .form-control:invalid {
+            border-color: var(--danger-color);
+        }
+
+        .was-validated .form-control:valid {
+            border-color: var(--success-color);
+        }
+
+        .was-validated .form-select:invalid {
+            border-color: var(--danger-color);
+        }
+
+        .was-validated .form-select:valid {
+            border-color: var(--success-color);
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Create New Product</h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddProduct" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label asp-for="ProductName" class="form-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="field-icon" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                    </svg>
+                                    Product Name
+                                </label>
+                                <input asp-for="ProductName" class="form-control" placeholder="Enter product name" required />
+                                <span asp-validation-for="ProductName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col form-col-md-6">
+                            <div class="form-group">
+                                <label asp-for="CategoryId" class="form-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="field-icon" viewBox="0 0 16 16">
+                                        <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+                                    </svg>
+                                    Category
+                                </label>
+                                <select asp-for="CategoryId" asp-items="@(ViewBag.Categories as List<SelectListItem>)"
+                                        class="form-select" required>
+                                    <option value="">-- Select Category --</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-col form-col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Price" class="form-label">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="field-icon" viewBox="0 0 16 16">
+                                        <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z" />
+                                    </svg>
+                                    Price
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01" placeholder="0.00" required />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PImage" class="form-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="field-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+                            </svg>
+                            Product Image
+                        </label>
+                        <div class="input-group-file">
+                            <input type="file" asp-for="PImage" class="form-control" id="imageUpload" accept="image/*" />
+                            <label class="input-group-file-label" for="imageUpload">
+                                Browse
+                            </label>
+                        </div>
+                        <div class="text-muted">
+                            Upload a high-quality image of your product (JPG, PNG formats recommended)
+                        </div>
+                        <div id="imagePreview" class="img-preview">
+                            <div class="img-preview-placeholder">
+                                <div class="img-preview-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                        <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+                                    </svg>
+                                </div>
+                                <div>No image selected</div>
+                            </div>
+                            <img src="/placeholder.svg" class="preview-image" style="display: none;" alt="Image preview" />
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a asp-action="Dashboard" class="btn btn-outline">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-right: 0.5rem;" viewBox="0 0 16 16">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                            </svg>
+                            Create Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image preview functionality
+        document.getElementById('imageUpload').addEventListener('change', function() {
+            const file = this.files[0];
+            const preview = document.getElementById('imagePreview');
+            const previewImage = preview.querySelector('.preview-image');
+            const placeholder = preview.querySelector('.img-preview-placeholder');
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    preview.classList.add('has-image');
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.style.display = 'none';
+                placeholder.style.display = 'flex';
+                preview.classList.remove('has-image');
+            }
+        });
+
+        // Form validation enhancement
+        (function () {
+            'use strict'
+
+            // Fetch all forms that need validation
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html>

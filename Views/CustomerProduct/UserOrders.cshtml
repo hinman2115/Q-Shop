@@ -1,0 +1,434 @@
+﻿@model List<QShop.Models.ViewModel.Order.OrderDTO>
+@{
+    ViewData["Title"] = "My Orders";
+}
+<link rel="stylesheet" href="~/css/Order.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div class="orders-dashboard">
+    <div class="dashboard-header">
+        <h2>My Orders</h2>
+        <div class="stats-pills">
+            <div class="stat-pill">
+                <span class="stat-value">@Model?.Count</span>
+                <span class="stat-label">Total Orders</span>
+            </div>
+            @if (Model != null && Model.Count > 0)
+            {
+                <div class="stat-pill">
+                    <span class="stat-value">@Model.Sum(o => o.Items?.Count ?? 0)</span>
+                    <span class="stat-label">Items</span>
+                </div>
+            }
+        </div>
+    </div>
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="orders-grid">
+            @foreach (var order in Model)
+            {
+                <div class="order-card" data-order-id="@order.OrderId">
+                    <div class="order-card-header">
+                        <div class="order-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>@order.OrderDate</span>
+                        </div>
+                        <div class="order-time">@order.OrderDate</div>
+                        <div class="order-status-container">
+                            <div class="payment-status @order.PaymentStatus.ToLower()">@order.PaymentStatus</div>
+                            <div class="order-status @order.OrderStatus.ToLower()">@order.OrderStatus</div>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        @if (order.Items != null && order.Items.Count > 0)
+                        {
+                            @foreach (var item in order.Items)
+                            {
+                                <div class="order-item">
+                                    <div class="item-image">
+                                        <img src="@item.ProductImage" alt="@item.ProductName" loading="lazy" />
+                                    </div>
+                                    <div class="item-details">
+                                        <h4 class="item-name">@item.ProductName</h4>
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <div class="item-quantity">Qty: @item.Quantity</div>
+                                        }
+                                        <div class="item-price">₹@item.Price.ToString("0.00")</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="order-summary">
+                        <div class="total-amount">
+                            <span>Total:</span>
+                            <span class="amount">₹@order.Items</span>
+                        </div>
+                        <div class="payment-method">
+                            <span>Payment:</span>
+                            <span>@order.Items</span>
+                        </div>
+                    </div>
+                    <div class="order-card-footer">
+                        <button class="btn-track-order" data-order-id="@order.OrderId">
+                            <i class="fas fa-truck"></i> Track Order
+                        </button>
+                        <button class="btn-view-details" data-order-id="@order.OrderId">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        @if (order.OrderStatus == "CREATED" || order.OrderStatus == "PROCESSING")
+                        {
+                            <button class="btn-cancel-order" data-order-id="@order.OrderId">
+                                <i class="fas fa-times-circle"></i> Cancel
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="orderDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div id="orderDetailsContent"></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <h3>No Orders Yet</h3>
+            <p>Looks like you haven't placed any orders yet.</p>
+            <a href="/products" class="btn-shop-now">Start Shopping</a>
+        </div>
+    }
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Handle cancel order button click
+        $('.btn-cancel-order').click(function() {
+            const orderId = $(this).data('order-id');
+            if (confirm('Are you sure you want to cancel this order?')) {
+                cancelOrder(orderId);
+            }
+        });
+
+        function cancelOrder(orderId) {
+            $.ajax({
+            url: '@Url.Action("Cancelorder", "CustomerProduct")',
+                type: 'POST',
+              data: { OrderID: orderId },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Order cancelled successfully');
+                        location.reload();
+                    } else {
+                        alert('Failed to cancel order: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while trying to cancel the order');
+                }
+            });
+        }
+
+        // Handle view details button click
+        $('.btn-view-details').click(function() {
+            const orderId = $(this).data('order-id');
+            loadOrderDetails(orderId);
+            $('#orderDetailsModal').show();
+        });
+
+        // Close modal when clicking on X
+        $('.close-modal').click(function() {
+            $('#orderDetailsModal').hide();
+        });
+
+        // Close modal when clicking outside of it
+        $(window).click(function(event) {
+            if (event.target == document.getElementById('orderDetailsModal')) {
+                $('#orderDetailsModal').hide();
+            }
+        });
+
+        function loadOrderDetails(orderId) {
+            $.ajax({
+                url: '/api/orders/' + orderId,
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        displayOrderDetails(response.data);
+                    } else {
+                        $('#orderDetailsContent').html('<p>Failed to load order details</p>');
+                    }
+                },
+                error: function() {
+                    $('#orderDetailsContent').html('<p>An error occurred while loading order details</p>');
+                }
+            });
+        }
+
+        function displayOrderDetails(order) {
+            let html = `
+                <h3>Order #${order.orderId}</h3>
+                <div class="order-detail-status">
+                    <span class="status-label">Status:</span>
+                    <span class="status-value ${order.orderStatus.toLowerCase()}">${order.orderStatus}</span>
+                </div>
+                <div class="order-detail-date">
+                    <span class="date-label">Ordered on:</span>
+                    <span class="date-value">${new Date(order.orderDate).toLocaleString()}</span>
+                </div>
+                <div class="order-detail-payment">
+                    <div class="payment-method">
+                        <span class="method-label">Payment Method:</span>
+                        <span class="method-value">${order.paymentMethod}</span>
+                    </div>
+                    <div class="payment-status">
+                        <span class="status-label">Payment Status:</span>
+                        <span class="status-value ${order.paymentStatus.toLowerCase()}">${order.paymentStatus}</span>
+                    </div>
+                </div>
+                <h4>Items</h4>
+                <div class="detail-items">`;
+
+            order.items.forEach(item => {
+                html += `
+                    <div class="detail-item">
+                        <div class="detail-item-image">
+                            <img src="${item.productImage}" alt="${item.productName}" loading="lazy" />
+                        </div>
+                        <div class="detail-item-info">
+                            <div class="detail-item-name">${item.productName}</div>
+                            <div class="detail-item-quantity">Qty: ${item.quantity}</div>
+                            <div class="detail-item-price">₹${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item-total">₹${item.total.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+                <div class="detail-totals">
+                    <div class="detail-total-row">
+                        <span>Total:</span>
+                        <span class="detail-amount">₹${order.totalPrice.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+            $('#orderDetailsContent').html(html);
+        }
+    });
+</script>
+    <style>
+        /* Additional Styles for Order Status and Cancel Button */
+        .order-status-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .order-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+            .order-status.created {
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+
+            .order-status.processing {
+                background-color: #fff8e1;
+                color: #ff8f00;
+            }
+
+            .order-status.shipped {
+                background-color: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .order-status.delivered {
+                background-color: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .order-status.canceled {
+                background-color: #ffebee;
+                color: #c62828;
+            }
+
+        .payment-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+            .payment-status.pending {
+                background-color: #fff8e1;
+                color: #ff8f00;
+            }
+
+            .payment-status.paid {
+                background-color: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .payment-status.failed {
+                background-color: #ffebee;
+                color: #c62828;
+            }
+
+        .order-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .total-amount {
+            font-weight: 600;
+        }
+
+        .amount {
+            color: #2e7d32;
+        }
+
+        .btn-cancel-order {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn-cancel-order:hover {
+                background-color: #ffcdd2;
+            }
+
+        .item-price {
+            font-weight: 500;
+            color: #666;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Order Details Styles */
+        .order-detail-status,
+        .order-detail-date,
+        .order-detail-payment {
+            margin-bottom: 15px;
+        }
+
+        .status-label,
+        .date-label,
+        .method-label {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .detail-items {
+            margin: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+
+            .detail-item:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+        .detail-item-image img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .detail-item-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .detail-item-name {
+            font-weight: 600;
+        }
+
+        .detail-item-total {
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .detail-totals {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .detail-total-row {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin-top: 5px;
+        }
+
+        .detail-amount {
+            font-weight: 600;
+            color: #2e7d32;
+        }
+    </style>

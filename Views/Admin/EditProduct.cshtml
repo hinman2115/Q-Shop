@@ -1,0 +1,330 @@
+﻿@model QShop.Models.ViewModel.NewFolder.ProductUpdate
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --light-bg: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-muted: #7f8c8d;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 2rem;
+        }
+
+        .card {
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 3rem auto;
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+                border-color: var(--primary);
+            }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-radius: 8px 0 0 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: none;
+        }
+
+        .form-section {
+            padding: 1.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .text-danger {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+                transform: translateY(-1px);
+            }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: var(--text-dark);
+            border: none;
+        }
+
+            .btn-secondary:hover {
+                background-color: #dee2e6;
+                color: var(--text-dark);
+            }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .field-icon {
+            color: var(--text-muted);
+            width: 20px;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+
+        .breadcrumb {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Animation */
+        .card {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form field focus animation */
+        .form-floating > .form-control:focus ~ label {
+            color: var(--primary);
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .form-container {
+                margin: 1rem;
+                max-width: 100%;
+            }
+
+            .card-header {
+                padding: 1rem;
+            }
+
+            .form-section {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="/ManageProduct">Products</a></li>
+                <li class="breadcrumb-item active">Edit Product</li>
+            </ol>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="page-title"><i class="fas fa-edit"></i> Edit Product</h2>
+                <p class="subtitle">Update the information for this product</p>
+            </div>
+
+            <form asp-controller="ManageProduct" asp-action="EditProduct" method="post" class="form-section needs-validation" novalidate>
+                <!-- Hidden field for ProductId -->
+                <input asp-for="ProductId" type="hidden" />
+
+                <!-- Display general error message -->
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="form-label">
+                                <i class="fas fa-tag field-icon"></i>Category
+                            </label>
+                            <select asp-for="CategoryId" class="form-select" required>
+                                <option value="">-- Select Category --</option>
+                                @if (ViewBag.Categories != null)
+                                {
+                                    foreach (var category in ViewBag.Categories)
+                                    {
+                                        <option value="@category.Value">@category.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="ProductName" class="form-label">
+                                <i class="fas fa-box-open field-icon"></i>Product Name
+                            </label>
+                            <input asp-for="ProductName" class="form-control" required placeholder="Enter product name" />
+                            <span asp-validation-for="ProductName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Price" class="form-label">
+                                <i class="fas fa-dollar-sign field-icon"></i>Price
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01" required placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="StockQuantity" class="form-label">
+                                <i class="fas fa-cubes field-icon"></i>Stock Quantity
+                            </label>
+                            <input asp-for="StockQuantity" class="form-control" type="number" min="0" required placeholder="Enter stock quantity" />
+                            <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="action-buttons">
+                    <a asp-controller="ManageProduct" asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-times btn-icon"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save btn-icon"></i>Update Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Show validation summary only if it has errors
+            if ($('.validation-summary-errors').length > 0) {
+                $('.alert').show();
+            }
+
+            // Form validation styles enhancement
+            $('form').on('submit', function() {
+                $(this).addClass('was-validated');
+            });
+
+            // Add animation to validation messages
+            $('input, select').on('focus', function() {
+                $(this).siblings('.text-danger').fadeIn(200);
+            });
+
+            // Auto-select first field
+            $('form input:visible:first').focus();
+
+            // Show success message when coming from successful update
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('updated') === 'true') {
+                const successAlert = $('<div class="alert alert-success mb-4" role="alert"><i class="fas fa-check-circle me-2"></i>Product updated successfully!</div>');
+                $('.card-header').after(successAlert);
+
+                // Auto-hide success message after 5 seconds
+                setTimeout(function() {
+                    successAlert.fadeOut(500);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
